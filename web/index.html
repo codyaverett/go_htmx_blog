@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTMX Blog</title>
+    <script src="https://unpkg.com/htmx.org@1.9.3"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>My HTMX Blog</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="blog-posts">
+        <h2>Recent Blog Posts</h2>
+
+        <!-- Button to dynamically load more posts -->
+        <button
+          hx-get="/load-more-posts"
+          hx-target="#blog-posts"
+          hx-swap="beforeend"
+        >
+          Load More Posts
+        </button>
+      </section>
+
+      <section id="comments">
+        <h3>Comments</h3>
+        <form
+          id="comment-form"
+          hx-post="/submit-comment"
+          hx-target="#comment-list"
+          hx-swap="beforeend"
+        >
+          <input
+            type="text"
+            name="comment"
+            placeholder="Add a comment..."
+            required
+          />
+          <button type="submit">Submit</button>
+        </form>
+
+        <ul id="comment-list">
+          <!-- Comments will be loaded here dynamically -->
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 My HTMX Blog</p>
+    </footer>
+  </body>
+</html>
