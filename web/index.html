@@ -54,6 +54,101 @@
           <!-- Comments will be loaded here dynamically -->
         </ul>
       </section>
+
+      <section id="add-user">
+        <h3>Add a New User</h3>
+        <form
+          id="user-form"
+          hx-post="/add-user"
+          hx-target="#user-list"
+          hx-swap="beforeend"
+        >
+          <input type="text" name="name" placeholder="Name" required />
+          <input type="email" name="email" placeholder="Email" required />
+          <button type="submit">Add User</button>
+        </form>
+      </section>
+
+      <ul id="user-list">
+        <!-- User list will be loaded here dynamically -->
+      </ul>
+
+      <script>
+        // Define the getUsers function
+        function getUsers() {
+          // Example implementation of getUsers
+          fetch("/get-users")
+            .then((response) => response)
+            .then((users) => users.body)
+            .then((body) => {
+              console.log(
+                body
+                  .getReader()
+                  .read()
+                  .then((result) =>
+                    console.log(
+                      result.done
+                        ? "Stream is closed"
+                        : new TextDecoder().decode(result.value)
+                    )
+                  )
+              );
+              const userList = document.getElementById("user-list");
+              // Render the list of users in the user list
+              userList.innerHTML = body;
+            })
+            .catch((error) => console.error("Error fetching users:", error));
+        }
+
+        // Call getUsers on initial page load
+        document.addEventListener("DOMContentLoaded", (event) => {
+          getUsers();
+        });
+      </script>
+
+      <section id="add-product">
+        <h3>Add a New Product</h3>
+        <form
+          id="product-form"
+          hx-post="/add-product"
+          hx-target="#product-list"
+          hx-swap="replace"
+        >
+          <input type="text" name="name" placeholder="Product Name" required />
+          <input type="number" name="price" placeholder="Price" required />
+          <button type="submit">Add Product</button>
+        </form>
+      </section>
+
+      <ul id="product-list">
+        <!-- Product list will be loaded here dynamically -->
+      </ul>
+      <script>
+        // Fetch the latest list of products from the server and render it in the product list
+        fetch("/get-products")
+          .then((response) => response)
+          .then((products) => products.body)
+          .then((body) => {
+            console.log(
+              body
+                .getReader()
+                .read()
+                .then(
+                  (result) =>
+                    (value = result.done
+                      ? "Stream is closed"
+                      : new TextDecoder().decode(result.value))
+                )
+                .then(
+                  (value) => {
+                    const productList = document.getElementById("product-list");
+                    productList.innerHTML = value;
+                  }
+                  // Render the list of products in the product list
+                )
+            );
+          });
+      </script>
     </main>
 
     <footer>
