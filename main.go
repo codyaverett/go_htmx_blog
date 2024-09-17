@@ -110,6 +110,7 @@ func main() {
 	fs := http.FileServer(http.Dir("./web"))
 
 	db.CreateProductTable(db.GetDB(dbFileName))
+	db.CreateUserTable(db.GetDB(dbFileName))
 
 	// Define routes
 	http.Handle("/", fs)

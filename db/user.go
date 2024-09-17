@@ -73,3 +73,19 @@ func DeleteUser(db *sql.DB, id int) error {
 
 	return nil
 }
+
+// create user table
+func CreateUserTable(db *sql.DB) error {
+	createTableSQL := `CREATE TABLE IF NOT EXISTS users (
+		"id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		"name" TEXT,
+		"email" TEXT
+	);`
+
+	_, err := db.Exec(createTableSQL)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
