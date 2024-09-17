@@ -105,6 +105,14 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, World")
 }
 
+func aboutHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "./web/about.html")
+}
+
+func contactHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "./web/contact.html")
+}
+
 func main() {
 	// Serve static files like index.html
 	fs := http.FileServer(http.Dir("./web"))
@@ -114,6 +122,8 @@ func main() {
 
 	// Define routes
 	http.Handle("/", fs)
+	http.HandleFunc("/about", aboutHandler)
+	http.HandleFunc("/contact", contactHandler)
 	http.HandleFunc("/hello", helloHandler)
 	http.HandleFunc("/load-more-posts", loadMorePosts)
 	http.HandleFunc("/submit-comment", submitComment)
