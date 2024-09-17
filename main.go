@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"demo/db"
 )
@@ -105,14 +106,6 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, World")
 }
 
-func aboutHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "./web/about.html")
-}
-
-func contactHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "./web/contact.html")
-}
-
 func main() {
 	// Serve static files like index.html
 	fs := http.FileServer(http.Dir("./web"))
@@ -120,12 +113,19 @@ func main() {
 	db.CreateProductTable(db.GetDB(dbFileName))
 	db.CreateUserTable(db.GetDB(dbFileName))
 
-	db.SendEmail("codyaverett@gmail.com", "Hello", "This is a test email")
+	// db.SendEmail("codyaverett@gmail.com", "Hello", "This is a test email")
 
 	// Define routes
-	http.Handle("/", fs)
-	http.HandleFunc("/about", aboutHandler)
-	http.HandleFunc("/contact", contactHandler)
+
+	// Custom handler to serve files without the .html extension
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// If the URL path does not end with a slash, add the files extension
+		if !strings.HasSuffix(r.URL.Path, "/") {
+			r.URL.Path += ".html"
+		}
+		fs.ServeHTTP(w, r)
+	})
+
 	http.HandleFunc("/hello", helloHandler)
 	http.HandleFunc("/load-more-posts", loadMorePosts)
 	http.HandleFunc("/submit-comment", submitComment)
