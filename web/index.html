@@ -61,7 +61,7 @@
           id="user-form"
           hx-post="/add-user"
           hx-target="#user-list"
-          hx-swap="beforeend"
+          hx-swap="replace"
         >
           <input type="text" name="name" placeholder="Name" required />
           <input type="email" name="email" placeholder="Email" required />
@@ -74,36 +74,28 @@
       </ul>
 
       <script>
-        // Define the getUsers function
-        function getUsers() {
-          // Example implementation of getUsers
-          fetch("/get-users")
-            .then((response) => response)
-            .then((users) => users.body)
-            .then((body) => {
-              console.log(
-                body
-                  .getReader()
-                  .read()
-                  .then((result) =>
-                    console.log(
-                      result.done
-                        ? "Stream is closed"
-                        : new TextDecoder().decode(result.value)
-                    )
-                  )
-              );
-              const userList = document.getElementById("user-list");
-              // Render the list of users in the user list
-              userList.innerHTML = body;
-            })
-            .catch((error) => console.error("Error fetching users:", error));
-        }
-
-        // Call getUsers on initial page load
-        document.addEventListener("DOMContentLoaded", (event) => {
-          getUsers();
-        });
+        // Example implementation of getUsers
+        fetch("/get-users")
+          .then((response) => response)
+          .then((users) => users.body)
+          .then((body) => {
+            console.log(
+              body
+                .getReader()
+                .read()
+                .then((result) =>
+                  result.done
+                    ? "Stream is closed"
+                    : new TextDecoder().decode(result.value)
+                )
+                .then((value) => {
+                  const userList = document.getElementById("user-list");
+                  // Render the list of users in the user list
+                  userList.innerHTML = value;
+                })
+            );
+          })
+          .catch((error) => console.error("Error fetching users:", error));
       </script>
 
       <section id="add-product">
