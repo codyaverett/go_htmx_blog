@@ -4,20 +4,29 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
 	"demo/db"
 )
 
+// Database file name
+var dbFileName = getEnv("DB", "yolo.db")
+
 // Constant variables used across all modules
 const (
-	// Database file name
-	dbFileName = "yolo.db"
-
 	// Server port
 	serverPort = ":8080"
 )
+
+// getEnv reads an environment variable or returns a default value if not set
+func getEnv(key, defaultValue string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return defaultValue
+}
 
 func loadMorePosts(w http.ResponseWriter, r *http.Request) {
 	// Generate HTML for more blog posts
@@ -135,7 +144,7 @@ func main() {
 	http.HandleFunc("/get-products", getProducts)
 
 	// Start the server
-	fmt.Println("Starting server at port " + serverPort + "...")
+	fmt.Println("Starting server at http://localhost" + serverPort)
 	if err := http.ListenAndServe(serverPort, nil); err != nil {
 		log.Fatal(err)
 	}
