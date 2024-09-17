@@ -120,6 +120,8 @@ func main() {
 	db.CreateProductTable(db.GetDB(dbFileName))
 	db.CreateUserTable(db.GetDB(dbFileName))
 
+	db.SendEmail("codyaverett@gmail.com", "Hello", "This is a test email")
+
 	// Define routes
 	http.Handle("/", fs)
 	http.HandleFunc("/about", aboutHandler)
