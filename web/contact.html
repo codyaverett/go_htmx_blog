@@ -3,11 +3,31 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>About</title>
+    <title>Contact</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
   </head>
   <body>
     Contact
+
+    <h1>Upload an Image</h1>
+    <!-- HTMX Form -->
+    <form
+      hx-post="/upload"
+      hx-include="*:[name]"
+      hx-target="#images"
+      hx-swap="outerHTML"
+      enctype="multipart/form-data"
+      method="POST"
+    >
+      <input type="file" name="image" accept="image/*" required />
+      <button type="submit">Upload</button>
+    </form>
+
+    <!-- Placeholder for the images table -->
+    <div id="images">
+      <!-- The table of images will be rendered here -->
+    </div>
   </body>
 </html>
